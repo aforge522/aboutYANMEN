@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字思政-雁门关回响</title>
+    <style>
+        /* 全局：采用稍微带有宣纸质感的极浅灰背景，文字统一为浓墨色，增强水墨感 */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fafafa; color: #1a1a1a; max-width: 1000px; margin: 0 auto; padding: 20px; }
+        
+        /* 标题部分保持原样，使用您提供的封面图，已自带沉稳色彩 */
+        h1 { text-align: center; color: #fff; background-image: url('22.png'); background-size: cover; background-position: center; border-radius: 8px; padding: 10px 10px; margin-bottom: 10px; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        h1::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); border-radius: 8px; z-index: 1; }
+        h1 > span { position: relative; z-index: 2; }
+        h1 .flag-icon-header { position: absolute; top: 10px; right: 20px; width: 60px; z-index: 2; }
+
+        /* 分隔花纹图保持原样 */
+        .pattern-separator { background-image: url('战国花纹1.png'); height: 20px; border-radius: 10px; margin: 30px 0; background-size: cover; }
+
+        /* 区域容器：背景设为纯白，更像干净的画纸，边框统一为炭灰色线条 */
+        .section { background: #ffffff; padding: 30px; margin-bottom: 40px; border-radius: 12px; box-shadow: 0 6px 15px rgba(0,0,0,0.1); border: 1px solid #dcd1be; position: relative; }
+        .section .flag-icon { position: absolute; top: -15px; right: 20px; width: 40px; }
+
+        /* 二级标题：文字颜色改为深浓墨，下划线改为中灰线条，保持庄重 */
+        h2 { color: #1a1a1a; border-bottom: 2px solid #b3b3b3; padding-bottom: 15px; font-size: 1.5rem; display: flex; align-items: center; }
+        h2 i { margin-right: 10px; }
+
+        /* 装饰图：边框统一为灰色线条 */
+        .decor-img-wrapper { display: flex; align-items: flex-start; margin-bottom: 20px; }
+        .decor-img-wrapper .section-text { flex: 1; margin-left: 20px; }
+        .decor-img-wrapper .decor-img { width: 120px; border-radius: 8px; border: 2px solid #dcd1be; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        /* 大插图：边框统一为沉稳的灰色线条 */
+        .large-illust { display: block; width: 100%; max-width: 800px; margin: 20px auto; border-radius: 12px; border: 3px solid #dcd1be; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+
+        /* 人物卡片：保持水墨画风 */
+        .figure-gallery { display: flex; flex-wrap: wrap; justify-content: center; margin-top: 30px; }
+        .figure-card { width: calc(25% - 20px); text-align: center; margin: 10px; border: 1px solid #dcd1be; background: white; border-radius: 8px; padding: 10px; box-sizing: border-box; display: inline-block; vertical-align: top; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .figure-card img { width: 100%; height: 180px; border-radius: 4px; object-fit: cover; margin-bottom: 10px; }
+        .figure-card h4 { margin: 5px 0; color: #2c3e50; font-size: 1.1rem; }
+        .figure-card p { margin: 0; color: #7f8c8d; font-size: 0.9rem; }
+
+        video { width: 100%; max-width: 600px; display: block; margin: 10px auto; border-radius: 8px; background: #000; box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+        
+        /* 按钮：统一配色方案，改为沉稳的炭灰/石板灰，统一文字为白色 */
+        .controls { text-align: center; margin-top: 20px; }
+        button { border: none; padding: 12px 24px; margin: 8px; border-radius: 6px; cursor: pointer; font-size: 1.1rem; transition: background-color 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        button:hover { filter: brightness(1.1); }
+        /* 禁用状态保持原有的浅灰 */
+        button:disabled { background-color: #bdc3c7; cursor: not-allowed; opacity: 0.7; }
+        
+        /* 录音按钮：从原红色改为浓墨灰 (Charcoal) */
+        .record-btn { background-color: #4d4d4d; color: white; }
+        /* 停止按钮：保持中灰色 (Mid Grey) */
+        .stop-btn { background-color: #737373; color: white; }
+        /* 播放/欣赏按钮：从原绿色改为石板灰 (Slate Grey) */
+        .playback-btn { background-color: #2c3e50; color: white; }
+        /* AI对话按钮：从原紫色改为黑巧克力炭灰 (Darker Charcoal) */
+        .ai-btn { background-color: #333333; color: white; }
+
+        /* 文本域：边框统一为灰色线条，内部纯白，便于模拟宣纸质感输入 */
+        textarea { width: 100%; height: 180px; padding: 15px; border: 2px solid #dcd1be; border-radius: 8px; font-size: 1.1rem; resize: vertical; background: white; box-sizing: border-box; color: #1a1a1a; }
+        
+        #audio-playback { width: 100%; max-width: 600px; display: block; margin: 20px auto; border-radius: 6px; }
+        
+        /* 状态文本保持原样，在白色背景上很醒目 */
+        .status { text-align: center; color: #e74c3c; font-weight: bold; margin-top: 15px; font-size: 1rem; }
+    </style>
+</head>
+<body>
+
+    <h1>
+    <div style="margin:5px 0;">
+        <img 
+            src="雁门关回响.png" 
+            alt="雁门关回响"
+            style="width:80%; height:auto; display:block; margin:0 auto;" >
+    </div>
+</h1>
+
+  
+    <div class="pattern-separator"></div>
+
+<div class="section" id="step-1" style="
+        background-image: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url('1.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: local; ">
+        <img src="汉旗.png" class="flag-icon" alt="装饰旗帜" style="position: absolute; top: 15px; right: 20px; width: 40px;">
+
+        <h2><i>🎥</i>观看配音范例</h2>
+        
+        <div class="decor-img-wrapper" style="background: rgba(255,255,255,0.4); padding: 15px; border-radius: 8px;">
+            <img src="鼎.png" class="decor-img" alt="鼎">
+            <div class="section-text">
+                <p style="font-weight: bold; color: #2c3e50;">雁门关，中华历史之丰碑，其重若鼎。</p>
+                <p>在配音前请体会情感节奏，领悟跨越千年的厚重历史感与民族气节。</p>
+            </div>
+        </div>
+
+        <video id="demo-video" controls src="雁门关合成0411-语音讲解版.mp4" style="border: 3px solid #dcd1be;"></video>
+
+        <p style="text-align: center; margin: 15px 0;">
+            <a href="雁门关合成0411英文解说版.mp4" target="_blank" style="padding: 5px 15px; background: rgba(44, 62, 80, 0.1); border-radius: 20px; text-decoration: none; color:#2c3e50; font-weight:bold;">
+                另点击可查看英文版解说版
+            </a>
+        </p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="pattern-separator"></div>
+
+<div class="section" id="step-1" style="
+        background-image: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url('3.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: local; ">
+
+ 
+            <img src="汉旗.png" class="flag-icon" alt="装饰旗帜" style="position: absolute; top: 15px; right: 20px; width: 40px;">
+
+        <h2><i>📝</i>跨越古今</h2>
+  <p>点击昭君vlog，随她穿越古今，亲历边塞风云，再行落笔，文字自会更具风骨与神采。</p>
+  <p>vlog友情出演演员表如下：</p>
+
+  <div class="figure-gallery">
+            <div class="figure-card">
+                <img src="李牧1.png" alt="李牧">
+                <h4>战国赵国 · 李牧</h4>
+                <p>韬光养晦，大胜匈奴。</p>
+            </div>
+            <div class="figure-card">
+                <img src="西汉李广.png" alt="西汉李广">
+                <h4>西汉飞将军 · 李广</h4>
+                <p>神勇机敏，百战沙场。</p>
+            </div>
+                  <div class="figure-card">
+                <img src="昭君.png" alt="昭君"> <a href="昭君穿越vlog.mp4"  target="_blank"   style="color:#2c3e50; font-weight:bold;">
+     点击查看昭君穿越vlog
+  </a>
+                <h4>和亲使者 · 王昭君</h4>
+                <p>出塞和亲，平定边疆。</p>
+            </div>
+         <div class="figure-card">
+               <img src="杨家将1.png" alt="杨家将">
+          <h4>宋朝名将 · 杨业</h4>
+                <p>帅守雁门，突厥胆裂。</p>
+            </div>
+             
+            </div>
+      
+        </div>
+    </div>
+      
+  
+
+    <div class="pattern-separator"></div>
+
+<div class="section" id="step-1" style="
+        background-image: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url('3.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: local; ">
+
+       <img src="汉旗.png" class="flag-icon" alt="装饰旗帜" style="position: absolute; top: 15px; right: 20px; width: 40px;">
+        <h2><i>🎤</i>解说与配音</h2>
+           <p>群贤毕至，风骨谁领？请挥毫泼墨，抒写心中的雁门史诗。</p>
+
+
+<div style="text-align: left;">
+  <textarea 
+    id="script-text" 
+    placeholder="（在此输入你的创意解说文稿）参考词如下：。"
+    style="width: 800px; height: 100px; font-size: 14px; padding: 10px; border-radius: 12px; border: 1px solid #ccc;">
+  </textarea>
+</div>
+
+
+ <p>金戈铁马，气吞山河；雄关万里，千载峥嵘。请以声为笔，为雁门关再赋新章。</p>
+
+        <video id="dub-video" muted src="雁门关合成0411.mp4"></video>
+        <video id="dub-video1" src="雁门关合成0411.mp4" style="display: none;"></video>
+        
+        <div class="controls">
+            <button id="start-btn" class="record-btn">◎ 开始录音 (同步播放画面)</button>
+            <button id="stop-btn" class="stop-btn" disabled>■ 停止录音</button>
+        </div>
+        <div id="status-text" class="status"></div>
+
+        <div style="margin-top: 30px;">
+            <h3 style="text-align: center; color: #27ae60; display: none;" id="result-title">🎉 你的配音作品：</h3>
+            <audio id="audio-playback" controls style="display: none;"></audio>
+            <div class="controls">
+                <button id="sync-play-btn" class="playback-btn" style="display: none;">▶ 同步欣赏完整作品 (音画合一)</button>
+            </div>
+        </div>
+        
+     
+
+      
+
+    <div class="pattern-separator"></div>
+
+<div class="section" id="step-1" style="
+        background-image: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url('3.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: local; ">
+
+    <img src="汉旗.png" class="flag-icon" alt="装饰旗帜" style="position: absolute; top: 15px; right: 20px; width: 40px;">
+        <h2><i>🎤</i>对古言歌</h2>
+           <p>跨越千载岁月，与先贤言欢且歌且谈</p>
+
+
+<div style="text-align: center;">
+
+
+
+<!-- 三个按钮 -->
+<button class="ai-btn">✨与太守共话</button>
+
+<button class="ai-btn" onclick="document.getElementById('song1').play()">
+  ✨与昭君同唱音频版
+</button>
+<audio id="song1" src="指尖阅尽千秋.mp3" preload="auto"></audio>
+
+<button class="ai-btn" onclick="playKTV()">
+  ✨与昭君同唱KTV版
+</button>
+<video id="song2" src="指尖阅尽千秋ktv版.mp4" preload="auto" width="100%" controls></video>
+
+<!-- 自动播放并显示视频的脚本 -->
+<script>
+function playKTV() {
+  let video = document.getElementById('song2');
+  video.style.display = 'block'; // 显示视频
+  video.play(); // 播放视频
+}
+</script>
+
+
+    <script>
+        // JavaScript逻辑保持不变
+        const dubVideo = document.getElementById('dub-video');
+        const dubVideo1 = document.getElementById('dub-video1');
+        const startBtn = document.getElementById('start-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        const audioPlayback = document.getElementById('audio-playback');
+        const statusText = document.getElementById('status-text');
+        const syncPlayBtn = document.getElementById('sync-play-btn');
+        const resultTitle = document.getElementById('result-title');
+        const aiBtn = document.getElementById('ai-btn');
+
+        let mediaRecorder;
+        let audioChunks = [];
+
+        // 开始录音
+        startBtn.addEventListener('click', async () => {
+            try {
+                // 请求麦克风权限
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    // 录音结束，生成音频文件
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    audioPlayback.src = audioUrl;
+                    
+                    // 显示播放控件
+                    resultTitle.style.display = 'block';
+                    audioPlayback.style.display = 'block';
+                    syncPlayBtn.style.display = 'inline-block';
+                    statusText.innerText = "录制完成！";
+                };
+
+                // 开始录音并同步播放无声视频
+                mediaRecorder.start();
+                dubVideo.currentTime = 0;
+                dubVideo.play();
+                
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                statusText.innerText = "正在录音... 请朗读阁下的解说辞";
+
+            } catch (err) {
+                alert("请允许麦克风权限以开始录音！");
+                console.error(err);
+            }
+        });
+
+        // 停止录音
+        stopBtn.addEventListener('click', () => {
+            mediaRecorder.stop();
+            dubVideo.pause();
+            
+            // 关闭麦克风轨道
+            mediaRecorder.stream.getTracks().forEach(track => track.stop());
+
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+        });
+
+    
+
+
+
+syncPlayBtn.addEventListener('click', () => {
+    // 让 显示的视频 dubVideo + 你的录音 同步播放
+    dubVideo.currentTime = 0;    // 视频回到开头
+    audioPlayback.currentTime = 0; // 录音回到开头
+    dubVideo.play();            // 播放视频
+ dubVideo1.play();    
+    audioPlayback.play();       // 播放你的声音
+});
+
+        // AI 按钮演示
+        aiBtn.addEventListener('click', () => {
+            alert("温馨提示：\n这是一个纯前端的单机演示网页。\n要真正实现此功能，需对接云端AI语音合成接口(如阿里云、腾讯云TTS)。请参考代码中的提示。");
+        });
+
+    </script>
+</body>
+</html>
